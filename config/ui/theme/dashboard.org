@@ -1,0 +1,30 @@
+#+TITLE: A Dashboard
+#+PROPERTY: header-args :tangle "~/.emacs.d/config/ui/theme/dashboard.el" :mkdirp yes 
+
+
+Ah... A really important thing to have. A dashboard to represent my
+config.
+
+Now getting started.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook))
+
+  (setq dashboard-startup-banner "~/.emacs.d/logo.txt") ;;Choose Logo
+
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")));; Open the dashboard instead of GNU windows
+
+  (setq dashboard-center-content t)
+
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+#+END_SRC
+
+I like to have a text logo. But you can change it into a png. You can
+also change the logo title
+
+As you can see, I haven't done much configuring to the dashboard. I find this
+sort of thing rather boring. That's why I installed Doom-themes to do
+all the work for me.

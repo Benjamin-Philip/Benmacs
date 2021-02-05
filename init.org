@@ -1,0 +1,186 @@
+#+TITLE: The init.el file
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/init.el
+
+This is the file that I will be using to load packages
+during initialization. 
+
+* Load computer specific files
+
+Before I install anything, I need to setup emacs to deal with any bugs
+certain versions have. I store these in =my-computer.el= file.
+
+#+BEGIN_SRC emacs-lisp 
+  (load "~/.emacs.d/my-computer.el" t)
+#+END_SRC
+
+I have plans of setting up a way a file that will load the right files
+according to computer.
+
+** TODO Improve portability of the config
+
+* Package Management
+
+These are all the configs to do with package management.
+
+** Add Package Archive
+
+I first will add the package-archives that I will use.
+
+#+BEGIN_SRC emacs-lisp 
+  (require 'package)
+  (add-to-list 'package-archives
+	       '("melpa"."https://melpa.org/packages/") t)
+  (add-to-list 'package-archives
+	       '("org" . "https://orgmode.org/elpa/") t)
+  (package-initialize)
+
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+#+END_SRC
+
+** use-package 
+
+use-package is a popular tool for lazy loading packages.
+
+#+BEGIN_SRC emacs-lisp 
+  ;; Install use package if not already installed
+
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+  (require 'use-package)
+
+  (setq use-package-always-ensure t) ;; ensure the Use package always installs a package
+#+END_SRC
+
+* Quick Configs
+
+This is where I will do quick configuring that I feel doesn't have
+anything with a package I installed.
+
+** Personal Info 
+
+Here is my personal info. I have more sensitive info in
+=~/.authinfo.gpg= . :
+
+#+BEGIN_SRC emacs-lisp 
+  (setq user-mail-address "benjamin.philip495@gmail.com"
+      user-full-name "Benjamin Philip")
+#+END_SRC
+
+** Backups
+
+Perhaps, this one thing that bugged me the most about it emacs. It
+should scatter auto save files all over the place ! I am now giving it
+a specific directory to use for Backups:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+#+END_SRC
+
+Disk space is cheap. Save lots :
+
+#+BEGIN_SRC emacs-lisp 
+  (setq delete-old-versions -1)
+  (setq version-control t)
+  (setq vc-make-backup-files t)
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+#+END_SRC
+** Custom configs
+
+When using ~customize~, Emacs by default will use the init.el file for
+customizations. This is rather irrating and confuses git by changing
+the file when I haven't changed the file. 
+
+A solution to that is using a seperate file for customizations.
+
+#+BEGIN_SRC emacs-lisp 
+  (setq custom-file "~/.config/emacs-custom.el")
+  (load custom-file t) ;; load custom file only if it exists
+#+END_SRC
+
+** Switch of some annoying GUI features
+
+Come on GNUs! Emacs is mostly used by [[https://www.gnu.org/fun/jokes/gnuemacs.acro.exp.en.html][Middle Aged Computer
+Scientists]]. When we started out, there wasnt' a Concept of GUI.
+
+#+BEGIN_SRC emacs-lisp 
+  (menu-bar-mode -1)
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+#+END_SRC
+
+** Reloading configs
+
+Sometimes, I do minor changes to my config and I don't want to restart
+my emacs server. This function takes care of that:
+
+#+BEGIN_SRC emacs-lisp 
+  (defun ben/reload-config ()
+    (interactive)
+    (load-file "~/.emacs.d/init.el"))
+#+END_SRC
+
+** Use UTF8
+
+For some reason emacs doesn't do this by default. It keeps on echoing
+"Coding System Undecided". 
+
+#+BEGIN_SRC emacs-lisp 
+  (prefer-coding-system 'utf-8)
+  (when (display-graphic-p)
+    (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+#+END_SRC
+
+** Line numbering
+
+I like to have line numbering. Only when programming though.
+
+#+BEGIN_SRC emacs-lisp 
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+END_SRC
+
+** Encryption and Decryption
+
+I use ~gnupg~ for encryption. Emacs has a package called [[https://www.emacswiki.org/emacs/EasyPG][Easy PG]], as a
+frontend for all the Open PGP stuff.
+
+*** Use Emacs for the passphrase
+
+An annoying thing with gpg, is that it uses an external tool, for entering
+pins and etc. I want to use Emacs' Minibuffer:
+
+#+BEGIN_SRC emacs-lisp 
+  (setenv "GPG_AGENT_INFO" nil) ;; disable the external tool in the emacs session. This forces gpg to use emacs
+#+END_SRC
+
+** Syntax Highlighting
+
+I know this has to do a lot with the theme, but syntax highlighting is
+built-in to emacs. So I am going to enable it here. The standard mode
+for Syntax higlighting is fontlock. 
+
+It doesn't work for all files on default, so I will enable it as
+global :
+
+#+BEGIN_SRC emacs-lisp 
+  (global-font-lock-mode 1)
+#+END_SRC
+
+* Load Config files
+
+** What am I doing ?
+
+I prefer to have my init files short and clean. So,
+major changes to packages will happen in the =~/.emacs.d/config=
+directory. I also, declare a package (~use-package~) in that
+file. This makes my config much cleaner and maintainable as
+I have files only configuring only one package.
+
+I use [[https://elpa.gnu.org/packages/load-dir][load-dir]] for loading files easily
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package load-dir)
+  (setq load-dir-recursive t);; Allow recursive loading
+  (load-dir-one "/home/ben/.emacs.d/config/")
+#+END_SRC
+

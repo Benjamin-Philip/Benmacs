@@ -1,0 +1,67 @@
+#+TITLE: Mail with Gnus
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.gnus
+I like to use Gnus for mail.  Mainly because it supports IMAP and
+is highly customisable.  This is my gnus config.
+
+
+* Setup Gmail
+
+Configure gnus for imap:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq gnus-select-method
+	'(nnimap "gmail"
+		 (nnimap-address "imap.gmail.com")
+		 (nnimap-server-port "imaps")
+		 (nnimap-stream ssl)))
+
+
+  (setq smtpmail-smtpmail-smtp-server "smtp.gmail.com"
+	smtpmail-smtp-service 587)
+#+END_SRC
+
+
+** bind ~gnus-group-list-all-groups~:
+
+I like to bind ~gnus-group-list-all-groups~ to ~o~:
+
+;#+BEGIN_SRC emacs-lisp :tangle ~/.gnus.el
+  (defun my-gnus-group-list-subscribed-groups ()
+    "List all subscribed groups with or without un-read messages"
+    (interactive)
+    (gnus-group-list-all-groups 5))
+
+
+  (define-key gnus-group-group-map
+    ;; list all the subscribed groups
+    (kbd "o") my-gnus-group-list-subscribed-groups)
+;#+END_SRC
+
+
+* MSMTP
+
+#+BEGIN_SRC emacs-lisp 
+(setq sendmail-program "/usr/bin/msmtp"
+      send-mail-function 'smtpmail-send-it
+      message-sendmail-f-is-evil t
+      message-sendmail-extra-arguments '("--read-envelope-from")
+      message-send-mail-function 'message-send-mail-with-sendmail)
+#+END_SRC
+
+* Fix a bug
+
+My Ubuntu emacs Installation is faulty. Here is a temporary hack that defines a missing function:
+
+#+BEGIN_SRC emacs-lisp 
+  (cl-defgeneric seq-contains-p (sequence elt &optional testfn)
+    "Return non-nil if SEQUENCE contains an element equal to ELT.
+  Equality is defined by TESTFN if non-nil or by `equal' if nil."
+      (catch 'seq--break
+	(seq-doseq (e sequence)
+	  (when (funcall (or testfn #'equal) e elt)
+	    (throw 'seq--break t)))
+	nil))
+#+END_SRC
+
+
+

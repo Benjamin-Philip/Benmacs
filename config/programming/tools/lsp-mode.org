@@ -1,0 +1,76 @@
+#+TITLE: Interact with Language Servers with lsp-mode
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/tools/lsp-mode.el
+
+Microsoft's LSP is what is (in my opinion) going to bring language
+interaction under one package. It allows one to interact with a
+programming language to its (the editor's). ~lsp-mode~ is an emacs
+client to LSP
+
+* Installing
+
+As usual, ~use-package~:
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode)
+#+END_SRC
+
+* Hooks
+
+These are all the hooks related to ~lsp-mode~ it self. For hooks
+related to each language, I have decided to set the hooks in their
+file.
+
+** Which-key
+
+ Enable which-key integration:
+
+ #+BEGIN_SRC emacs-lisp
+   (add-hook 'lsp-mode 'lsp-enable-which-key-integration)
+ #+END_SRC
+
+* Improving Performace
+
+I like to have speed when possible, the thing is the lsp process takes
+a lot memory and power. Here are some tweaks that improve performace.
+
+** Increase garbage collection threshold
+
+Set the gc-threshold to higher number than default (50 mb):
+
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 50000000) ;; 50 mb threshold
+#+END_SRC
+
+** Increase data read from processes
+
+Set the read-process-max to 1 mb:
+
+#+BEGIN_SRC emacs-lisp
+  (setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+END_SRC
+
+** Use company as the backend
+
+Set company to the backend:
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-completion-provider :capf)
+#+END_SRC
+
+** Be more idle
+
+Set a delay for refreshes:
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-idle-delay 0.500)
+#+END_SRC
+
+** Report Performace Issues
+
+If all fails, I atleast would like to know what is going on. So, I am
+setting ~lsp~ to report performace:
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-print-performance t)
+#+END_SRC
+

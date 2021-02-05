@@ -1,0 +1,32 @@
+#+TITLE: Autocompletion with company-mode
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/tools/company-mode.el
+* What is company-mode
+
+[[https://company-mode.github.io][company-mode]] is a text completion framework for emacs
+that is much newer and nicer looking than the older
+[[https://github.com/auto-complete/auto-complete][autocomplete]]. It is great for suggestions and completions.
+
+* Configuiring
+
+I like company to start by itself:
+
+
+#+BEGIN_SRC emacs-lisp 
+  (add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+
+I also like to have immediate suggestions:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq company-idle-delay 0)
+#+END_SRC
+
+
+* Documentation pop-ups
+
+Documentation pop-ups is a very useful thing to have. Use it as well:
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package company-quickhelp)
+  (company-quickhelp-mode)
+#+END_SRC

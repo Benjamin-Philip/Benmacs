@@ -1,0 +1,18 @@
+#+TITLE: Debugging using the Language Server Protocol
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/tools/dap-mode.el
+
+I had just setup some support for ~lsp-mode~. Naturally, I thought that I
+should also setup support for debugging with the Language
+Server. ~lsp-mode~, luckily has a sister mode called ~dap-mode~. In
+this file, I will be configuring dap-mode.
+
+* Install and Configure
+
+Now, dap-mode doesn't offer much configuration. I have just chosen to
+use the autoconfigure support is comes with.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package dap-mode)
+  (setq dap-auto-configure-features '(sessions locals controls tooltip))
+#+END_SRC
+

@@ -1,0 +1,94 @@
+#+TITLE: A Java IDE
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/java/java-ide.el
+Let's face it : Emacs sucks as a Java IDE. That's usually okay as the
+people who use Emacs in the first place have a more elegant language
+to work on. 
+
+(A good example of that is Clojure, which combined the
+beauty of lisp with the functionality of java. Which also was written
+by an emacs user.)
+
+But occasionally, you have to use "pure" Java to do something, and we
+emacs users are helpless at that moment and end up using something
+inferior like Eclispe or Intellij.
+
+* use package
+
+So I found a package called [[https://github.com/emacs-lsp/lsp-java][lsp-java]] which connects to the [[https://projects.eclipse.org/projects/eclipse.jdt.ls][Eclipse JDT
+Language Server]]. This gives me all the features I would get in Eclipse
+inside Emacs. 
+
+Here are the things it needs:
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package lsp-java) ;; connects to the lsp
+#+END_SRC
+
+* Hooks
+
+These are the hooks needed for lsp-mode to work on java mode:
+
+#+BEGIN_SRC emacs-lisp 
+  (require 'lsp-java-boot)
+
+  (add-hook 'java-mode-hook #'lsp)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+#+END_SRC
+
+* Configuration
+
+The following is my configuration of ~lsp-java~. It provides a
+configuration that works and doesn't do any thing fancy. Please also
+be aware that I don't have a good knowledge of Java, so you will have
+to find better configs somewhere else.
+
+** Language Server
+
+These are the config to the with the Eclipse LS:
+
+ #+BEGIN_SRC emacs-lisp
+   ;; installation instruction
+   (setq lsp-java-server-install-dir "~/language-servers/java/")
+   (setq lsp-java-jdt-download-url "http://download.eclipse.org/che/che-ls-jdt/snapshots/che-jdt-language-server-latest.tar.gz ")
+
+   ;; general settings
+   (setq lsp-java-trace-server t)
+   (setq lsp-java-implementations-code-lens-enabled t)
+ #+END_SRC
+
+** Java
+
+These are configs to do with the Java Executable.
+Please be warned that these are configs are specific to my computer
+and may not work on yours.
+
+#+BEGIN_SRC emacs-lisp 
+  (setq lsp-java-java-path "/usr/bin/java")
+
+  ;; package management stuff
+  (setq lsp-java-import-gradle-enabled t)
+  (setq lsp-java-import-maven-enabled t)
+  (setq lsp-java-maven-download-sources f)
+#+END_SRC
+
+** LSP UI
+
+This is mostly the configuration for the IDE like stuff - things like
+completion suggestions, import sorts etc.
+
+#+BEGIN_SRC emacs-lisp 
+  ;; things to do with suggestions from the ide
+  (setq lsp-java-signatures-help-enabled t)
+  (setq lsp-java-completion-enabled t)
+  (setq lsp-java-completion-guess-methods-arguments t)
+
+
+  ;; things to do with formating
+  (setq lsp-java-format-enabled t)
+  (setq lsp-java-save-actions-organize-imports t)
+  (setq lsp-java-format-comments-enabled t)
+  (setq lsp-java-format-on-type-enabled t)
+#+END_SRC
+
+That's it ! My main aim was to create a usable interface which makes
+Java programming easier. Of course. this isn't the best of configs.

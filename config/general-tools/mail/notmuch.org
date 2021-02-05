@@ -1,0 +1,109 @@
+#+TITLE: Mail with(out) +Not+much software
+
+I used to use Gnus for mail. After a month I just got fed up. The
+bloody thing just never imported the mails I needed, and that just
+drove me nuts.
+
+So I decided that I am going to store my important mail locally. A
+nice piece of software (which I think is some good, let's hope it
+isn't a failiure like gnus) which specializes in local mail is
+[[notmuchmail.org][notmuch]]. Notmuch is a cli that manages your local mail and tags it,
+and stuff like that. It also has a First Party Emacs UI.
+
+Now, in order to manage use notmuch, I need some mail locally for this
+I initially decided to use [[www.fetchmail.info][fetchmail]] with [[https://en.wikipedia.org/wiki/Post_Office_Protocol][POP3]]. Unfortunately,
+google's pop server was not responding. This was another  annoying
+thing to deal with. Luckily though,google's [[https://en.wikipedia.org/wiki/Internet_Message_Access_Protocol][IMAP]] server was working.
+So I am going to use [[http://www.offlineimap.org/][offlineimap]].
+
+We also would prefer to have our mail encrypted. So we will have to
+use [[https://en.wikipedia.org/wiki/SSL][SSL]]. Luckily though we don't need to install anything for that.
+
+*** Software needed :
+
+1. [[notmuchmail.org][notmuch]]
+2. [[http://www.offlineimap.org/][offlineimap]]
+3. Emacs (obviously)
+
+Told you there's notmuch software needed!
+
+*Note:* notmuch and offlineimap needs to be installed via your distro's
+ package manager (apt, dnf, pacman, zypper, portage etc.) I don't know
+ about installing it if you are on a Mac though. You could try brew.
+
+*Disclaimer:* While this is documentation, I feel like writing it like
+ a blog post. So, um be informed,
+
+* Offlineimap
+
+Now, (if you haven't realised already) I use gmail like most normal
+people as my email provider. That means, I have to use [[https://www.google.com/landing/2step/][2 Step
+Verification]] for IMAP. So, you will have to setup an app password for
+the mail server.
+
+Also, like normal people, I have a lot of ads, scam, promotions and
+generally shit, that I don't care about out. I want to filter all of
+that out *using offlineimap* because I don't want it to set foot on
+computer(s) (Not because I am paranoid, but I don't to setup a cron
+service to delete all junk mail)
+
+I also want to have all sent mail synced.
+
+So here is my .offlineimaprc:
+
+#+BEGIN_SRC toml :tangle ~/.offlineimaprc
+  [general]
+  accounts = Gmail 
+  maxsyncaccounts = 2
+
+  [Account Gmail]
+  localrepository = Local
+  remoterepository = Remote
+
+  [Repository Local]
+  type = Maildir
+  localfolders = ~/Maildir/
+
+  [Repository Remote]
+  type = IMAP
+  remotehost = imap.gmail.com
+  remoteuser = benjamin.philip495@gmail.com
+  remotepass = gyrxcqcetdhlifqw  
+  ssl = yes
+  maxconnections = 1
+  # even if I delete something locally, I don't want to loose it forever
+  realdelete = no
+
+  # cert_fingerprint = fa88366ccd90cd02f7a5655800226c43c8044ada
+  # but they change all the time, so...
+  sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
+  # Folders to get:
+  #
+  # In Gmail, filter all current mail that isn't *otherwise*
+  # filtered into the folder or folders you want to receive/sync.
+  # Keep that up to date; it will boost efficiency if you would
+  # otherwise be syncing a very large "Inbox" here.
+  folderfilter = lambda foldername: foldername in [
+	       '[Gmail]/Drafts', '[Gmail]/Sent', '[Gmail]/Important']
+
+#+END_SRC
+
+If you are curious about what was my =~/.fetchmailrc=, here it is:
+
+#+BEGIN_SRC toml
+  set postmaster "ben"
+  set daemon 600
+  poll pop.gmail.com with proto POP3
+   user "benjamin.philip495" there with password "super_secret_app_password" is "ben" here
+  mda "/usr/bin/procmail -d %s"
+#+END_SRC
+
+Look at the ~folderfilter~. Notice how I am only importing drafts,
+important, and sent mail. This is how I ensure I have no duplicated in
+each folder. Important mail, is personal mail, I have recieved. Sent
+mail is what I have sent. and Drafts are those that I haven't sent.
+When I send something from my draft, it then gets transferred to sent
+mail.
+
+

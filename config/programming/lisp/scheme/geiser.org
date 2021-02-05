@@ -1,0 +1,20 @@
+#+TITLE: Geiser - REPL for scheme
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/lisp/scheme/geiser.el 
+I use Geiser for Scheme REPL - because it's the only thing
+that supports MIT-Scheme. Slime doesn't. Unfortunatley. 
+
+* General Configs
+
+Use the package:
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package geiser)
+#+END_SRC
+
+Set the history:
+#+BEGIN_SRC emacs-lisp 
+  (setq geiser-repl-history-filename "~/.emacs.d/geiser-history")
+#+END_SRC
+
+
+

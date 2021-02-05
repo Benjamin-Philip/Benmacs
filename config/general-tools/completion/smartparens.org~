@@ -1,0 +1,32 @@
+#+TITLE: Manage lot's of silly parathese (lisp) with smartparens.
+#+OPTIONS: tex:t
+Lisp (and other languages) have a lot of brackets. Languages like LaTeX
+have a lot of different kind of pairs like "$"s and "\(..\)" and "\[..\]" 
+I like to manage all these diffrent pairs with smartparens.
+
+* use package
+
+Use the package and it's default config.
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/general-tools/completion/smartparens.el
+  (use-package smartparens)
+  (require 'smartparens-config)
+#+END_SRC
+
+* Use the package in various modes
+
+We now need to start smartparens in all the modes we need it in (which is all the modes):
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/general-tools/completion/smartparens.el
+  (smartparens-global-mode)
+#+END_SRC
+
+I like to have smartparens every where.
+
+** Related: Matching Paratheses
+
+I like to have emacs show the pairs. Here's the config for that:
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/general-tools/completion/smartparens.el
+  (show-paren-mode 1)
+#+END_SRC 

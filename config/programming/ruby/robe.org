@@ -1,0 +1,30 @@
+#+TITLE:  Ruby IDE with Robe
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/ruby/robe.el
+Recently(late 2020), I decided to write a script in ruby instead of
+python because pypi was down. Here is a quick config to make a Ruby
+IDE out of emacs.
+
+* lazy load 
+
+As usual we need to ~use-package~:
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/programming/ruby/robe.el
+  (use-package robe)
+  (use-package rvm) ;; Load ruby virtual machine
+#+END_SRC
+
+* Quick hooks
+
+robe (atleast in [[https://github.com/dgutov/robe][README]]) doesn't seem to to have any configuration
+options. So, all I need to do is add some hooks and it will work !
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/programming/ruby/robe.el
+  (add-hook 'ruby-mode-hook 'robe-mode) ;; Initialize with ruby-mode
+
+  (eval-after-load 'company
+    '(push 'company-robe company-backends));; Use robe as a possible backend
+
+  (advice-add 'inf-ruby-console-auto :before #'rvm-activate-corresponding-ruby)
+#+END_SRC
+
+And that's all the config I thought about (or /copied/) !

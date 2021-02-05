@@ -1,0 +1,194 @@
+#+TITLE: Incremental Completion with Helm
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/general-tools/completion/helm/helm.el
+Now this package is in a league of its own. It makes using Emacs an
+even more pleasant experience (Though that means using my web browser
+becomes more difficult)
+
+Though I have created an entire section for Helm, I have not yet added
+any files other than this. This will be the main file for Helm
+configuration. The main purpose of this file, is so that I can setup
+helm and bind it to certain common keybindings. 
+
+This file will also be used for configuring things native to helm
+itself (As opposed to packages which extend Helm's functionality.)
+
+* Use package
+
+The usual bare minimum for a package :
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package helm) ;; install
+
+  (require 'helm-config) ;; use the packaged config
+#+END_SRC
+
+* Keybindings
+
+These are some of the keybindings:
+
+** Change the helm command prefix
+
+The default "C-x c" is quite close to "C-x C-c", which quits
+Emacs. This is extremely inconvenient and so, I am setting is to "C-c h".
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+#+END_SRC
+
+** Persistent Action
+
+Some quick keybinding for persistent action:
+
+#+BEGIN_SRC emacs-lisp 
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+#+END_SRC
+
+* Important Commands
+
+** ~helm-M-x~
+
+There isn't a default keybinding for ~helm-M-X~, I will map it to
+"M-x".
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "M-x") 'helm-M-x)
+#+END_SRC
+
+This command is much nicer to use than the regular ~M-x~. I can use
+fuzzy matching, regexps, and much more.
+
+Also fuzzy matching:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+#+END_SRC
+
+** ~helm-show-kill-ring~
+
+No default key binding. We should give it one:
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+#+END_SRC
+
+This command allows me to cycle between text that I have killed, and
+make my life much easier,
+
+** ~helm-mini~
+
+No default key binding. We should give it one:
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "C-x b") 'helm-mini)
+#+END_SRC
+
+Also fuzzy matching:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq helm-buffers-fuzzy-matching t
+	helm-recentf-fuzzy-match    t)
+#+END_SRC
+
+Helm mini is what you use for buffers and files. It helps you search
+for buffers by using regex, patterns etc.
+
+** ~helm-find-files~
+
+I like to use =C-x C-f= as the keystorke for finding files.
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+#+END_SRC
+
+** ~helm-semantic-or-imenu~
+
+It is bound to <prefix> i (C-c h i)
+
+This command allows me to search through function definitions and
+variable definitions in a buffer (imenu). It also has language aware
+editing commands (semantic). This command is an interface to these two
+packages.
+
+Enable fuzzy matching:
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/general-tools/completion/helm/helm.el 
+  (setq helm-semantic-fuzzy-match t
+	helm-imenu-fuzzy-match    t)
+#+END_SRC
+
+** ~helm-man-woman~
+
+It is bound to <prefix> m (C-c h m)
+
+With helm-man-woman, you can quickly jump to any man entry using the
+Helm interface, either by typing in Helm prompt or if the point is on
+a symbol, opening the man page at point.
+
+#+BEGIN_SRC emacs-lisp 
+  (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+#+END_SRC
+
+** ~helm-occur~
+
+<prefix> M-s o ( C-c h M-s o). Since this is a rather long binding, we
+should bind a more convenient key sequence:
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "C-c h o") 'helm-occur)
+#+END_SRC
+
+This command helps with jumping to a line which matches a certain
+pattern. (Similar to occur)
+
+** ~helm-apropos~
+
+Bound to <prefix> a.
+
+This command describles the following:
+
+ - Commands
+ - Functions
+ - Classes
+ - Generic Functions
+ - Variables
+ - And many more
+
+This is really handy as I now only need to remeber one keybinding for
+a lot things.
+
+And enable fuzzy matching:
+
+#+BEGIN_SRC emacs-lisp 
+  (setq helm-apropos-fuzzy-match t)
+#+END_SRC
+
+** ~helm-google-suggest~
+
+<prefix> C-c g (prefix is C-x c by default, or C-c h if set). Let's
+bind it to something else:
+
+
+#+BEGIN_SRC emacs-lisp 
+  (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+#+END_SRC
+
+This command allows me to enter terms and get search results from
+Google in a Helm buffer.
+
+
+* Packages 
+
+These are just packages that don't need any configuration and just
+need to be initialized:
+
+** Helm descbinds
+
+This packages describes all Helm binds.
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package helm-descbinds
+    :init (helm-descbinds-mode))
+#+END_SRC

@@ -1,0 +1,52 @@
+#+TITLE: Make lsp-mode look good !
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/tools/lsp-ui.el
+
+~lsp-mode~ has the option of using a package called ~lsp-ui~ to give
+that VS Code functionality of previewing documentation, having that
+line on top which describes your ~class~ (Code Navigation), having a "debug" button in
+your code (Code Lens). (Basically make you feel that you are working on a polished
+text editor like VS Code)
+
+
+* Install lsp-ui
+
+Use ~use-package~ to install ~lsp-ui~
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-ui)
+#+END_SRC
+
+* Sideline
+
+I absolutely hate this feature. I find that not using some widget of
+some sort or a pop up buffer is just extremly ugly. Also, I don't
+think I need the information I get from the feature. So I am just
+going to disable it. 
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-ui-sideline-enable nil)
+#+END_SRC
+
+* Documentation
+
+This can a really valuable feature. Most of the time it isn't, but
+when you are working with something unfamiliar, it might come in
+handy. 
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-ui-doc-enable t) ;; Enable the feature
+  (setq lsp-ui-doc-delay 0.75) ;; Take 45 miliseconds to start
+#+END_SRC
+
+Just FYI, there's an option to use a Webkit widget to view
+documentation, but, I find that the default pop-up is good enough.
+
+* Breadcrumbs Code navigation
+
+This is probably the most useless thing ever in emacs. But... It's a
+nice gimmick. That's why I am enabling it.
+
+#+BEGIN_SRC emacs-lisp
+  (setq lsp-headerline-breadcrumb-enable t) ;; Enable the feature
+  (setq lsp-headerline-breadcrumb-segments '(symbols)) ;;  Only navigate inside the file. Doesn't include PATH
+#+END_SRC

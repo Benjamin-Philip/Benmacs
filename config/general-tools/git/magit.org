@@ -1,0 +1,19 @@
+#+TITLE: Its' magic with magit!
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/general-tools/git/magit.el
+Magit is the popular tool to interact with git.  Version control is
+something I really depend on.  especcially git (I am forever in debt to
+you, Linus Torvalds. Linux has changed my life and so has git!)  Hell,
+I use version control for my emacs config (An emacs config is a part of
+a dev by the way. Stripping a dev of emacs is like amputating his right
+hand! You see how much I trust git!)
+
+* use package
+
+It turns out that I don't configure magit a lot - yet.
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package magit)
+#+END_SRC
+
+
+

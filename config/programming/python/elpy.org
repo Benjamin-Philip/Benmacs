@@ -1,0 +1,41 @@
+#+TITLE: Python IDE with elpy
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/python/elpy.el
+Elpy is a package aimed at builing a Python IDE out of emacs. It has
+built-in support for virtualenvs, unittests, Django and better features
+than the preinstalled python.el .
+
+* Install and enable
+
+I also need ~rx~ for elpy.
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package elpy
+    :ensure t)
+  (use-package rx
+    :ensure t)
+  (elpy-enable)
+#+END_SRC
+
+* Jupyter kernel for interactive python
+
+I like to use the Jupyter console for interacive python, because I can use
+the kernel with out the need to fire up a notebook. This gives me a lot of
+flexibility with which kernel I use and what not.
+
+#+BEGIN_SRC emacs-lisp 
+  (setq python-shell-interpreter "jupyter"
+	python-shell-interpreter-args "console --simple-prompt"
+	python-shell-prompt-detect-failure-warning nil)
+  (add-to-list 'python-shell-completion-native-disabled-interpreters
+	       "jupyter")
+#+END_SRC
+
+* Use flycheck instead of flymake
+
+I prefer flycheck to flymake so, make elpy use flycheck:
+
+#+BEGIN_SRC emacs-lisp 
+  (when (load "flycheck" t t)
+    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+    (add-hook 'elpy-mode-hook 'flycheck-mode))
+#+END_SRC

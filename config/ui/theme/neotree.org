@@ -1,0 +1,23 @@
+#+TITLE: File trees with Neotree
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/ui/theme/neotree.el
+This is not a feature I use very frequently. Simply because helm find
+files does all the work for me. But there comes a time, when I do feel
+like having a file tree like representation of all my files. 
+
+The reason I like to use NeoTree over treemacs is because neotree
+doesn't depend on projectile. I can use it anywhere. Treemacs always
+needs you to have a project, which I feel is just inconvenient.
+
+* Install and call
+
+Neotree doesn't have customizations (To my knowledge) So I just
+install it and bind it:
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/config/ui/theme/neotree.el
+  (use-package neotree)
+
+  (global-set-key [f8] 'neotree-toggle)
+#+END_SRC
+
+I also don't need to deal with Icons as Doom Theme takes care of it
+for me.

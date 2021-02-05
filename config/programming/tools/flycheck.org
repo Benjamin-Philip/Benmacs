@@ -1,0 +1,35 @@
+#+TITLE: Syntax checking with flycheck
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/programming/tools/flycheck.el
+* What is flycheck
+
+Flycheck is a synatax checker in GNU Emacs with support for 50 programming languages.
+The reason I chose it instead of flymake is because it seems to have better 
+functionality than flymake and also mostly because of personal fancy.
+
+* Goals
+
+The only thing as of right now I want flycheck to do is to just
+work seamlessly and let me get on with programming. I might customize
+it more as time passes and need arises.
+
+* Config
+
+So the [[https://www.flycheck.org/en/latest/user/syntax-checks.html][flycheck docs]] say that I only need to add one line,
+and it will work out of the box:
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package flycheck)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+#+END_SRC
+
+
+I also like a [[https://github.com/flycheck/flycheck-pos-tip][GUI popup]] along with the syntax checking:
+
+#+BEGIN_SRC emacs-lisp 
+  (with-eval-after-load 'flycheck
+    (use-package flycheck-pos-tip)
+    (flycheck-pos-tip-mode))
+#+END_SRC
+
+And that's about it! Since, flycheck integrates very [[https://www.flycheck.org/en/latest/user/error-interaction.html][well]] with the emacs
+key bindings, I have no futher configs to make.

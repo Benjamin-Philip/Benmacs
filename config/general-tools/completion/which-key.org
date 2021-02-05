@@ -1,0 +1,30 @@
+#+TITLE: Remeber your Keychords with which key
+#+PROPERTY: header-args :mkdirp yes :tangle ~/.emacs.d/config/general-tools/completion/which-key.el
+
+I think I should tell the truth.. It's not Remeber, but be reminded
+what are the possiblities, when you are halfway a keychord. I plan to
+use [[https://github.com/justbur/emacs-which-key][which key]] with [[https://github.com/abo-abo/hydra][hydra]]. I think it will end up in disaster. But
+we'll see.
+
+
+* Lazy Load
+
+We now must Lazy Load everything (Though now that I think about it,
+Lazy-Loading has no effect):
+
+#+BEGIN_SRC emacs-lisp 
+  (use-package which-key)
+#+END_SRC
+
+* Configuration
+
+Here is the which-key configuration :
+
+#+BEGIN_SRC emacs-lisp 
+  (which-key-setup-minibuffer) ;; use minibuffer with built in config
+  (which-key-mode)
+#+END_SRC
+
+That's it. I don't really need to change the which key configuration
+much, as I like it as it is. (Also, which-key isn't the most
+interesting thing to procastinate on.)
